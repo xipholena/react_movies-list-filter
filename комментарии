@@ -1,0 +1,58 @@
+export class App extends Component {
+  state = {
+    query: '',
+  };
+  
+  render() {
+    //оглашается и фильтруется именно сдесь, когда массив приходит с сервера, записывать его в стейт не нужно
+    const movies=moviesFromServer.filter( 
+      (item, i, arr) => {
+        console.log('filter', 'array:', arr);
+        return (
+          item.title.toLowerCase()
+          .includes(this.state.query.toLowerCase()) 
+          || item.description.toLowerCase()
+          .includes(this.state.query.toLowerCase())
+        )
+      }
+    );
+
+    return (
+      <div className="page">
+        <div className="page-content">
+          <div className="box">
+            <div className="field">
+              <label htmlFor="search-query" className="label">
+                Search movie
+              </label>
+
+              <div className="control">
+                <input
+                  type="text"
+                  id="search-query"
+                  className="input"
+                  placeholder="Type search word"
+                  value={this.state.query}
+                  onChange={(e) => {
+                    console.log('on change');
+
+                    this.setState({
+                      //передаём введённые данные
+                      query: e.target.value, 
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <MoviesList movies={movies} />
+        </div>
+        <div className="sidebar">
+          Sidebar goes here
+        </div>
+      </div>
+    );
+  }
+}
+
